@@ -1,53 +1,80 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Romantic Surprise 💕</title>
+    <title>Special Surprise 💕</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div id="floating-container"></div>
 
     <div class="container">
-        <h1>💝 A Small Surprise For You 💝</h1>
+        <h1>💝 A Special Surprise For You 💝</h1>
 
         <div class="card">
             <h2>🌹 Today's Shayari</h2>
-            <p>{{ content.shayari }}</p>
+            <p id="shayari-text">{{ content.shayari }}</p>
+            <button class="share-btn" onclick="shareText('shayari-text')">Share 📲</button>
         </div>
 
         <div class="card">
             <h2>😄 Today's Joke</h2>
-            <p>{{ content.joke }}</p>
+            <p id="joke-text">{{ content.joke }}</p>
+            <button class="share-btn" onclick="shareText('joke-text')">Share 📲</button>
         </div>
 
         <div class="card">
             <h2>🎵 Special Song</h2>
-            <iframe width="300" height="200" src="{{ content.song[1] }}" 
-                    frameborder="0" allowfullscreen></iframe>
-            <p>{{ content.song[0] }}</p>
+            <div class="music-player">
+                <div class="song-info">
+                    <h3>{{ content.song.name }}</h3>
+                    <p>By {{ content.song.artist }}</p>
+                </div>
+                <audio controls style="width: 100%">
+                    <source src="{{ content.song.audio_url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
         </div>
 
         <div class="card">
             <h2>🐢 Cute Tortoise</h2>
-            <img src="{{ content.tortoise_image }}" alt="Cute Tortoise" class="img">
-            <p>{{ content.quote }}</p>
+            <img src="{{ content.tortoise_image }}" alt="Cute Tortoise" class="img" loading="lazy">
+            <p id="quote-text">{{ content.quote }}</p>
+            <button class="share-btn" onclick="shareText('quote-text')">Share 📲</button>
         </div>
 
         <div class="card">
             <h2>🌿 Plant Corner</h2>
-            <img src="{{ content.plant_image }}" alt="Beautiful Plant" class="img">
+            <img src="{{ content.plant_image }}" alt="Beautiful Plant" class="img" loading="lazy">
             <p>Growing together, day by day 🌱</p>
         </div>
 
         <div class="card special">
             <h2>✨ Last Updated</h2>
             <p>{{ content.timestamp }}</p>
+            <button class="refresh-btn" onclick="location.reload()">Refresh Content 🔄</button>
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/floating.js') }}"></script>
+    <script>
+        async function shareText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        text: text
+                    });
+                } else {
+                    navigator.clipboard.writeText(text);
+                    alert('Copied to clipboard! 📋');
+                }
+            } catch (err) {
+                console.error('Error sharing:', err);
+            }
+        }
+    </script>
 </body>
 </html>

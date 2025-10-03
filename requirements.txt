@@ -1,5 +1,5 @@
-Flask 
-Werkzeug 
-requests 
-gunicorn 
-feedparser 
+Flask==2.2.5
+Werkzeug==2.2.3
+requests==2.31.0
+gunicorn==21.2.0
+feedparser==6.0.11
